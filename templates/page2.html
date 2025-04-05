@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles.css')}}">
+    <title>Style Transfer</title>
+</head>
+<body style="background-color: rgba(240,240,240,1.0);">
+    <div class="top-bar">
+        <a href="{{url_for('home')}}">Home</a>
+        <a href="{{url_for('style')}}">Style</a>
+        <a href="{{url_for('training')}}">Training</a>
+        <a href="{{url_for('background')}}">Background</a>
+        <a href="{{url_for('method')}}">Method</a>
+        <a href="{{url_for('about_us')}}">About Us</a>
+    </div> 
+    <div class="spacer"></div>
+    <h1 style="text-align: center;"><i>EST</i> Easy Style Transfer</h1>
+    <h3 style="text-align: center;">Follow the README to install all the necessary packages required to run the local script.</h3>
+    <div style="display:flex; flex-direction: row; justify-content: space-evenly; margin-top: 100px; align-items: center;">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            {% if images%}
+                <img id="img" style="display: none;  width: 256px; height: 256px; padding-bottom: 50px;" src="{{ url_for('static', filename='Generated/' + images[1]) }}" alt="Generated Image;">
+            {% endif %}
+            <form id="randomForm" action="/random" method="POST">
+                <input type="hidden" id="randInput" name="rand">
+                <div id="randomBox" onclick="generateRandom()" style="cursor: pointer; border: 2px solid black; background-color: lightgray; color: black; border-radius: 5px; text-align: center; font-size: 1.5rem; font-weight: bold; padding: 20px; width: 200px;">
+                    {% if rsd == "0" or rsd == "None" %}
+                        Click to Generate
+                    {% else %}
+                        Random: {{rsd}}
+                    {% endif %}
+                </div>
+            </form> 
+            <p><i>Generate Image</i></p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            {% if images%}
+                <img id="sty" style="display: none;  width: 256px; height: 256px; padding-bottom: 50px;" src="{{ url_for('static', filename='Generated/' + images[2]) }}" alt="Generated Image;">
+            {% endif %}
+            <form id="styleForm" action="/sty" method="POST">
+                <select id="dropdown1" name="style" onchange="submitStyleForm(); adjustWidth(this)">
+                    <option value="0" {% if sty_seed == "0" or sty_seed == "None" %}selected{% endif %}>None</option>
+                    <optgroup label="Styles">
+                        <option value="235" {% if sty_seed == "235" %}selected{% endif %}>Abstract Expressionism</option>
+                        <option value="237" {% if sty_seed == "237" %}selected{% endif %}>Action Painting</option>
+                        <option value="150" {% if sty_seed == "150" %}selected{% endif %}>Analytical Cubism</option>
+                        <option value="327" {% if sty_seed == "327" %}selected{% endif %}>Art Nouveau Modern</option>
+                        <option value="194" {% if sty_seed == "194" %}selected{% endif %}>Baroque</option>
+                        <option value="46" {% if sty_seed == "46" %}selected{% endif %}>Color Field Painting</option>
+                        <option value="255" {% if sty_seed == "255" %}selected{% endif %}>Contemporary Realism</option>
+                        <option value="363" {% if sty_seed == "363" %}selected{% endif %}>Cubism</option>
+                        <option value="160" {% if sty_seed == "160" %}selected{% endif %}>Early Renaissance</option>
+                        <option value="153" {% if sty_seed == "153" %}selected{% endif %}>Expressionism</option>
+                        <option value="134" {% if sty_seed == "134" %}selected{% endif %}>Fauvism</option>
+                        <option value="161" {% if sty_seed == "161" %}selected{% endif %}>High Renaissance</option>
+                        <option value="67" {% if sty_seed == "67" %}selected{% endif %}>Impressionism</option>
+                        <option value="125" {% if sty_seed == "125" %}selected{% endif %}>Mannerism Late Renaissance</option>
+                        <option value="140" {% if sty_seed == "140" %}selected{% endif %}>Minimalism</option>
+                        <option value="348" {% if sty_seed == "348" %}selected{% endif %}>Naive Art Primitivism</option>
+                        <option value="143" {% if sty_seed == "143" %}selected{% endif %}>New Realism</option>
+                        <option value="124" {% if sty_seed == "124" %}selected{% endif %}>Northern Renaissance</option>
+                        <option value="71" {% if sty_seed == "71" %}selected{% endif %}>Pointillism</option>
+                        <option value="38" {% if sty_seed == "38" %}selected{% endif %}>Pop Art</option>
+                        <option value="149" {% if sty_seed == "149" %}selected{% endif %}>Post Impressionism</option>
+                        <option value="110" {% if sty_seed == "110" %}selected{% endif %}>Realism</option>
+                        <option value="186" {% if sty_seed == "186" %}selected{% endif %}>Rococo</option>
+                        <option value="119" {% if sty_seed == "119" %}selected{% endif %}>Romanticism</option>
+                        <option value="247" {% if sty_seed == "247" %}selected{% endif %}>Symbolism</option>
+                        <option value="193" {% if sty_seed == "193" %}selected{% endif %}>Synthetic Cubism</option>
+                        <option value="48" {% if sty_seed == "48" %}selected{% endif %}>Ukiyo-e</option>
+                    </optgroup>
+                </select>
+            </form>
+            <p><i>Select Style</i></p>
+        </div>
+    </div>
+
+    <div style="display:flex; flex-direction: column; text-align: center; margin-top: 200px; align-items: center;">
+        {% if images%}
+            <img id="out" style="display: none;  width: 256px; height: 256px; padding-bottom: 50px;" src="{{ url_for('static', filename='Generated/' + images[0]) }}" alt="Generated Image;">
+        {% endif %}
+            <p><b>Output</b></p>
+    </div>
+</body>  
+
+<script>
+    function generateRandom() {
+        const randomInt = Math.floor(Math.random() * 10000); 
+        document.getElementById("randomBox").innerText = `Random: ${randomInt}`;
+        document.getElementById("randInput").value = randomInt;
+        document.getElementById("randomForm").submit();
+    }
+
+    function adjustWidth(dropdown) {
+        const selected = dropdown.options[dropdown.selectedIndex];
+        const temp = document.createElement("span");
+        temp.style.visibility = "hidden";
+        temp.style.position = "absolute";
+        temp.style.whiteSpace = "nowrap"; 
+        temp.textContent = selected.textContent;
+        document.body.appendChild(temp);
+        dropdown.style.width = `${temp.offsetWidth + 20}px`;
+        document.body.removeChild(temp);
+    }
+
+    function submitStyleForm() {
+        document.getElementById("styleForm").submit();
+    }
+
+    window.onload = function() {
+        const dropdown = document.getElementById('dropdown1');
+        adjustWidth(dropdown);
+        if("{{images}}") {
+            document.getElementById("img").style.display = "block";
+            document.getElementById("sty").style.display = "block";
+            document.getElementById("out").style.display = "block";
+        }
+    };;
+</script>
+</html>

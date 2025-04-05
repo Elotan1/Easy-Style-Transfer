@@ -1,0 +1,39 @@
+.top-bar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: whitesmoke;
+    color:black;
+    display:flex;
+    justify-content: end;
+    gap: 20px;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+.top-bar a {
+    color: black;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.top-bar a:hover {
+    color: #FFD700; 
+}
+.spacer {
+    height: 40px;
+}
+.image-with-label {
+    text-align: center;
+    margin: 10px;
+}   
+.image-with-label img {
+    max-width: 50%;
+    height: auto;
+}
+.label {
+    font-size: 1rem;
+    color:black;
+
+}

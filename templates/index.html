@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<HTML lang="en"></HTML>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles.css')}}">
+        <title>Home Page</title>
+        <style>
+            button {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 15px;
+            background-color: darkorange;
+            color:black;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;;
+            }
+            button:hover {
+                background-color: #0033cc;
+                color: #FFD700;
+            }
+        </style>
+    </head>
+
+    <body style="background-color: rgba(240,240,240,1.0);">
+        <div class="top-bar">
+            <a href="{{url_for('home')}}">Home</a>
+            <a href="{{url_for('style')}}">Style</a>
+            <a href="{{url_for('training')}}">Training</a>
+            <a href="{{url_for('background')}}">Background</a>
+            <a href="{{url_for('method')}}">Method</a>
+            <a href="{{url_for('about_us')}}">About Us</a>
+        </div>
+        <div class="spacer"></div>
+        <h1 style="display: flex;justify-content: center;margin-bottom: 50px;">Welcome to Easy Style Transfer!</h1>
+        <p style="display: flex;justify-content: center;margin-bottom: 50px;">A tool for anyone to mix styles locally! Try it below!</p>
+        <div style="display: flex;justify-content: center;margin-bottom: 20px;">
+            <a href="{{url_for('style')}}">
+                <button>Try it Out</button>
+            </a>
+        </div>
+        <div style="display: flex; justify-content: center;">
+        <div style="flex-direction: column;">
+            <h2 style="text-decoration: underline;">Tool Info:</h2>
+            <p>Follow the README to install all the necessary packages required to run the local script.</p>
+            <p>Using StyleGan2, we trained a network on a dataset, wikiart, which contains a variety of differing styles.</p>
+            <p>Our tool provides a quick and convenient way to try StyleGan2!</p>
+            <p>Here are some examples of our style mixes:</p>
+            <img src="{{url_for('static',filename='grid_example.png')}}" height="500" width="500">
+            <img src="{{url_for('static',filename='grid_example2.png')}}" height="500" width="800">
+        </div>
+    </body>
+    
+</HTML>

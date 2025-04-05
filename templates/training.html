@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<HTML lang="en"></HTML>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles.css')}}">
+        <title>Home Page</title>
+        <style>
+            button {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 15px;
+            background-color: darkorange;
+            color:black;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;;
+            }
+            button:hover {
+                background-color: #0033cc;
+                color: #FFD700;
+            }
+        </style>
+    </head>
+
+    <body style="background-color: rgba(240,240,240,1.0);">
+        <div class="top-bar">
+            <a href="{{url_for('home')}}">Home</a>
+            <a href="{{url_for('style')}}">Style</a>
+            <a href="{{url_for('training')}}">Training</a>
+            <a href="{{url_for('background')}}">Background</a>
+            <a href="{{url_for('method')}}">Method</a>
+            <a href="{{url_for('about_us')}}">About Us</a>
+        </div>
+        <div class="spacer"></div>
+        <div style="display: flex;justify-content: center;margin-bottom: 20px;">
+            <a href="{{url_for('style')}}">
+                <button>Try it Out</button>
+            </a>
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <h1>Training</h1>
+        </div>
+        <div style="flex-direction: column;">
+            <h2 style="text-decoration: underline;">StyleGan2:</h2>
+            <p>As stated prior, to properly train our network, we used StyleGan2's generative adversarial network.</p>
+            <p>To run the wikiart dataset through our model, we first needed to truncate the images in 3 color channel, 256x256 size images.</p>
+            <p>Using the built in training function, we trained our network on the dataset for 3000 kimg, which is 3000 instances of a thousand images per tick for a total of approximately 750 ticks. This took 3 days to fully train using 1 GPU.</p>
+            <p>This training data was then stored in the form of a .pkl network file, which StyleGan2 then used to perform image generation and style mixing.</p>    
+                
+                
+                
+                
+                
+            <p>Below are some visualizations of our mean loss functions for both the Generator and Discriminator networks as a result of training on wikiart. The generator is responsible for creating fake images to try to trick the second network, the discriminator network, which is responsible for classifying style.</p>
+            <div style="display: flex; flex-direction: row;justify-content: space-evenly; align-items: center;">
+                <div class="image-with-label">
+                    <p class="label">This is a graph denoting the mean loss of our generator and discriminator networks per tick.</p>
+                    <img src="{{url_for('static',filename='G&D.png')}}" height="2700" width="2700">
+                    <p>The generator and discriminator networks gradually converge as tick rate proceeds, stabilizing the training process.  </p>
+                </div>
+                <div class="image-with-label">
+                    <p class="label">This graph shows the mean loss of the discriminator's ability to distinguish between real and fake images.</p>
+                    <img src="{{url_for('static',filename='score.png')}}" height="2500" width="2500">
+                    <p>The discriminator is able to differentiate between the real and fake images more accurately as tick rate proceeds, which can be seen in the constant mean loss in later ticks.
+                    </p>
+                </div>
+            </div>
+        <div style="flex-direction: column;">
+            <h2 style="text-decoration: underline;">Python Package Details:</h2>
+            <p>We trained our network using the following python packages (installed using MiniConda3):</p>
+            <ul>
+                <li>ffmpeg                    4.3  </li>
+                <li>pytorch                   1.8.0  </li>
+                <li>torchaudio              0.8.0     </li>
+                <li>torchvision              0.9.0     </li>
+                <li>cuda-toolkit             11.7.0    </li>
+                <li>cuda                       11.7.0  </li>
+                <li>ninja                      1.12.1    </li>
+            </ul>
+            <p>We also used the following pip install:</p>
+            <p style="text-decoration: underline;"> pip install click requests tqdm pyspng scipy</p>
+        
+        </div>
+    </body>
+</HTML>
